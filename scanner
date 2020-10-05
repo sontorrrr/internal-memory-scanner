@@ -8,23 +8,14 @@ int main(  ) {
 
 	MEMORY_BASIC_INFORMATION mbi;
 
-	for (
-		size_t address = 0; 
-		VirtualQuery((PVOID)address, &mbi, sizeof mbi); 
-		address += mbi.RegionSize) {
+	for (size_t address = 0; VirtualQuery((PVOID)address, &mbi, sizeof mbi); address += mbi.RegionSize) {
 
 		if (mbi.State != MEM_COMMIT) continue;
 		if (mbi.Protect != PAGE_READWRITE) continue;
 
-		for (
-			size_t x = 0; 
-			x < mbi.RegionSize; 
-			++x) {
+		for (size_t x = 0; x < mbi.RegionSize; ++x) {
 
-			for (
-				size_t y = 0; 
-				y < test.length(); 
-				++y) {
+			for (size_t y = 0; y < test.length(); ++y) {
 
 				if (*(byte*)(address + x + y) != test[y])
 					break;
